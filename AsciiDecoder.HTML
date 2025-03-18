@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Read TXT File</title>
+</head>
+<body>
+    <input type="file" id="fileInput" accept=".txt">
+    <pre id="fileContent"></pre>
+
+    <h1 id="animationPlayer"></h1>
+
+    <script>
+
+        var frames = [];
+        var fps;
+        var frameCount;
+        var currentFrame = 0;
+
+        function playAnimation(){
+
+            document.getElementById("animationPlayer").innerHTML = frames[currentFrame-1];
+
+            console.log(currentFrame);
+            if(currentFrame >= parseInt(frameCount)){
+                currentFrame = 0;
+            }
+            currentFrame += 1;
+        }
+
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+
+
+
+                    var text = e.target.result
+
+
+
+                    var splitText = text.split(" ");
+
+                    for(var i = 0; i < splitText.length; i++){
+                        var currentWord = splitText[i];
+
+                        if(currentWord == "<"){
+                            fps = splitText[i+1];
+                        }
+
+                        if(currentWord == "'"){
+                            frameCount = splitText[i+1];
+                        }
+
+                        if(currentWord == "{"){
+                            frames.push(splitText[i+1].replace(/\r?\n/g, '<br>'));
+
+                            console.log(splitText[i+1].replace(/\r?\n/g, '<br>'));
+                        }
+                    }
+
+                    const loop = setInterval(playAnimation, 1000/fps);
+
+
+                };
+                reader.readAsText(file);
+            }
+        });
+    </script>
+</body>
+</html>

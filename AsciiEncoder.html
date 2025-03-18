@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<style>
+
+    body{
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    #asciiTXT{
+        display: flex;
+        height: 500px;
+        font-size: 30px;
+        
+    }
+    
+    button{
+        width: 100px;
+        height: 50px;
+    }
+
+    #output{
+        height: 500px;
+        font-size: 30px;
+        float: right;
+        margin-top: -505px;
+    }
+
+
+</style>
+</head>
+<body>
+    <textarea id="asciiTXT" name="asciiTXT" rows="20" cols="35", class = "input"></textarea>
+    <button id="Input" onclick="addFrame()">Add</button>
+    
+
+    <textarea id="output" name="output" rows="20" cols="35", class = "output"></textarea>
+
+    <p>FPS</p>
+    <input type="number" id="ASCIIfps"></input>
+    <p>Frame Count</p>
+    <input type="number" id="ASCIIframecount"></input>
+    <button id="Submit" onclick="submitParameters()">Submit</button>
+    <button onclick="downloadTXT()">Download</button>
+
+    <p>File Name</p>
+    <input type="text" id="fileName"></input>
+
+    <script>
+
+        var finalFileTXT = "";
+
+        var parametersSubmited = false;
+        function addFrame(){
+            if(parametersSubmited){
+            finalFileTXT += " { ";
+
+            finalFileTXT += document.getElementById("asciiTXT").value;
+
+
+            document.getElementById("output").value = finalFileTXT;
+            }
+        }
+
+        function submitParameters(){
+            parametersSubmited = true;
+
+            finalFileTXT += "< ";
+
+            finalFileTXT += document.getElementById("ASCIIfps").value;
+
+            finalFileTXT += " ' ";
+
+            finalFileTXT += document.getElementById("ASCIIframecount").value;
+
+            document.getElementById("output").value = finalFileTXT;
+        }
+
+        function downloadTXT(){
+
+            var userText = finalFileTXT;
+
+            var fileName = document.getElementById("fileName").value;
+
+            if (!userText) {
+                alert("Please create the file");
+                return;
+            }
+
+            if (!fileName) {
+                alert("Please enter file name");
+                return;
+            }
+
+            var blob = new Blob([userText], { type: "text/plain" });
+
+            var link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = fileName + ".asciart.txt";
+
+            link.click();
+        }
+    </script>
+</body>
+</html>
